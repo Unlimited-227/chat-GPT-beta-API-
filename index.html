@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenAI API Test</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <h1>OpenAI API Test</h1>
+    <form>
+      <label for="input-text">Enter text to generate:</label>
+      <textarea id="input-text" placeholder="Enter text here"></textarea>
+      <button id="generate-btn">Generate</button>
+    </form>
+    <div id="output"></div>
+    <script>
+      document.getElementById("generate-btn").addEventListener("click", function(event) {
+  event.preventDefault(); // prevent form from submitting
+
+  // Get input text
+  var inputText = document.getElementById("input-text").value;
+
+  // Make API request
+  var apiKey = "your_api_key_here";
+  var endpoint = "https://api.openai.com/v1/engines/davinci-codex/completions";
+  var prompt = "The input text is: " + inputText;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", endpoint, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      var output = data.choices[0].text;
+
+      // Display output in "output" div
+      document.getElementById("output").innerHTML = output;
+    }
+  };
+  var data = JSON.stringify({
+    prompt: prompt,
+    max_tokens: 100
+  });
+  xhr.send(data);
+});
+
+    </script>
+  </body>
+</html>
